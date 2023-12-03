@@ -1311,7 +1311,8 @@ TimNodes = __TObject:new{
   ntype,
   nodelist,
   usermap,
-  roommap
+  roommap,
+  node
 }
 
 function TimNodes:read(iprot)
@@ -1366,6 +1367,12 @@ function TimNodes:read(iprot)
       else
         iprot:skip(ftype)
       end
+    elseif fid == 5 then
+      if ftype == TType.STRING then
+        self.node = iprot:readString()
+      else
+        iprot:skip(ftype)
+      end
     else
       iprot:skip(ftype)
     end
@@ -1408,6 +1415,11 @@ function TimNodes:write(oprot)
       viter119:write(oprot)
     end
     oprot:writeMapEnd()
+    oprot:writeFieldEnd()
+  end
+  if self.node ~= nil then
+    oprot:writeFieldBegin('node', TType.STRING, 5)
+    oprot:writeString(self.node)
     oprot:writeFieldEnd()
   end
   oprot:writeFieldStop()
