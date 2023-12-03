@@ -927,7 +927,8 @@ public func ==(lhs: TimNodes, rhs: TimNodes) -> Bool {
     (lhs.ntype == rhs.ntype) &&
     (lhs.nodelist == rhs.nodelist) &&
     (lhs.usermap == rhs.usermap) &&
-    (lhs.roommap == rhs.roommap)
+    (lhs.roommap == rhs.roommap) &&
+    (lhs.node == rhs.node)
 }
 
 extension TimNodes : CustomStringConvertible {
@@ -937,7 +938,8 @@ extension TimNodes : CustomStringConvertible {
     desc += "ntype=\(String(describing: self.ntype)), "
     desc += "nodelist=\(String(describing: self.nodelist)), "
     desc += "usermap=\(String(describing: self.usermap)), "
-    desc += "roommap=\(String(describing: self.roommap))"
+    desc += "roommap=\(String(describing: self.roommap)), "
+    desc += "node=\(String(describing: self.node))"
     return desc
   }
 
@@ -950,6 +952,7 @@ extension TimNodes : Hashable {
     hasher.combine(nodelist)
     hasher.combine(usermap)
     hasher.combine(roommap)
+    hasher.combine(node)
   }
 
 }
@@ -957,7 +960,7 @@ extension TimNodes : Hashable {
 extension TimNodes : TStruct {
 
   public static var fieldIds: [String: Int32] {
-    return ["ntype": 1, "nodelist": 2, "usermap": 3, "roommap": 4, ]
+    return ["ntype": 1, "nodelist": 2, "usermap": 3, "roommap": 4, "node": 5, ]
   }
 
   public static var structName: String { return "TimNodes" }
@@ -968,6 +971,7 @@ extension TimNodes : TStruct {
     var nodelist: TList<String>?
     var usermap: TMap<String, TimUserBean>?
     var roommap: TMap<String, TimRoomBean>?
+    var node: String?
 
     fields: while true {
 
@@ -979,6 +983,7 @@ extension TimNodes : TStruct {
         case (2, .list):            nodelist = try TList<String>.read(from: proto)
         case (3, .map):             usermap = try TMap<String, TimUserBean>.read(from: proto)
         case (4, .map):             roommap = try TMap<String, TimRoomBean>.read(from: proto)
+        case (5, .string):           node = try String.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -989,7 +994,7 @@ extension TimNodes : TStruct {
     // Required fields
     try proto.validateValue(ntype, named: "ntype")
 
-    return TimNodes(ntype: ntype, nodelist: nodelist, usermap: usermap, roommap: roommap)
+    return TimNodes(ntype: ntype, nodelist: nodelist, usermap: usermap, roommap: roommap, node: node)
   }
 
 }
