@@ -354,16 +354,19 @@ public final class TimNodes {
 
   public var roommap: TMap<String, TimRoomBean>?
 
+  public var node: String?
+
 
   public init(ntype: Int32) {
     self.ntype = ntype
   }
 
-  public init(ntype: Int32, nodelist: TList<String>?, usermap: TMap<String, TimUserBean>?, roommap: TMap<String, TimRoomBean>?) {
+  public init(ntype: Int32, nodelist: TList<String>?, usermap: TMap<String, TimUserBean>?, roommap: TMap<String, TimRoomBean>?, node: String?) {
     self.ntype = ntype
     self.nodelist = nodelist
     self.usermap = usermap
     self.roommap = roommap
+    self.node = node
   }
 
 }
