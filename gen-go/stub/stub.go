@@ -4783,11 +4783,13 @@ func (p *TimStream) Validate() error {
 //  - Nodelist
 //  - Usermap
 //  - Roommap
+//  - Node
 type TimNodes struct {
   Ntype int32 `thrift:"ntype,1,required" db:"ntype" json:"ntype"`
   Nodelist []string `thrift:"nodelist,2" db:"nodelist" json:"nodelist,omitempty"`
   Usermap map[string]*TimUserBean `thrift:"usermap,3" db:"usermap" json:"usermap,omitempty"`
   Roommap map[string]*TimRoomBean `thrift:"roommap,4" db:"roommap" json:"roommap,omitempty"`
+  Node *string `thrift:"node,5" db:"node" json:"node,omitempty"`
 }
 
 func NewTimNodes() *TimNodes {
@@ -4813,6 +4815,13 @@ var TimNodes_Roommap_DEFAULT map[string]*TimRoomBean
 func (p *TimNodes) GetRoommap() map[string]*TimRoomBean {
   return p.Roommap
 }
+var TimNodes_Node_DEFAULT string
+func (p *TimNodes) GetNode() string {
+  if !p.IsSetNode() {
+    return TimNodes_Node_DEFAULT
+  }
+return *p.Node
+}
 func (p *TimNodes) IsSetNodelist() bool {
   return p.Nodelist != nil
 }
@@ -4823,6 +4832,10 @@ func (p *TimNodes) IsSetUsermap() bool {
 
 func (p *TimNodes) IsSetRoommap() bool {
   return p.Roommap != nil
+}
+
+func (p *TimNodes) IsSetNode() bool {
+  return p.Node != nil
 }
 
 func (p *TimNodes) Read(ctx context.Context, iprot thrift.TProtocol) error {
@@ -4873,6 +4886,16 @@ func (p *TimNodes) Read(ctx context.Context, iprot thrift.TProtocol) error {
     case 4:
       if fieldTypeId == thrift.MAP {
         if err := p.ReadField4(ctx, iprot); err != nil {
+          return err
+        }
+      } else {
+        if err := iprot.Skip(ctx, fieldTypeId); err != nil {
+          return err
+        }
+      }
+    case 5:
+      if fieldTypeId == thrift.STRING {
+        if err := p.ReadField5(ctx, iprot); err != nil {
           return err
         }
       } else {
@@ -4981,6 +5004,15 @@ var _key39 string
   return nil
 }
 
+func (p *TimNodes)  ReadField5(ctx context.Context, iprot thrift.TProtocol) error {
+  if v, err := iprot.ReadString(ctx); err != nil {
+  return thrift.PrependError("error reading field 5: ", err)
+} else {
+  p.Node = &v
+}
+  return nil
+}
+
 func (p *TimNodes) Write(ctx context.Context, oprot thrift.TProtocol) error {
   if err := oprot.WriteStructBegin(ctx, "TimNodes"); err != nil {
     return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err) }
@@ -4989,6 +5021,7 @@ func (p *TimNodes) Write(ctx context.Context, oprot thrift.TProtocol) error {
     if err := p.writeField2(ctx, oprot); err != nil { return err }
     if err := p.writeField3(ctx, oprot); err != nil { return err }
     if err := p.writeField4(ctx, oprot); err != nil { return err }
+    if err := p.writeField5(ctx, oprot); err != nil { return err }
   }
   if err := oprot.WriteFieldStop(ctx); err != nil {
     return thrift.PrependError("write field stop error: ", err) }
@@ -5073,6 +5106,18 @@ func (p *TimNodes) writeField4(ctx context.Context, oprot thrift.TProtocol) (err
   return err
 }
 
+func (p *TimNodes) writeField5(ctx context.Context, oprot thrift.TProtocol) (err error) {
+  if p.IsSetNode() {
+    if err := oprot.WriteFieldBegin(ctx, "node", thrift.STRING, 5); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:node: ", p), err) }
+    if err := oprot.WriteString(ctx, string(*p.Node)); err != nil {
+    return thrift.PrependError(fmt.Sprintf("%T.node (5) field write error: ", p), err) }
+    if err := oprot.WriteFieldEnd(ctx); err != nil {
+      return thrift.PrependError(fmt.Sprintf("%T write field end error 5:node: ", p), err) }
+  }
+  return err
+}
+
 func (p *TimNodes) Equals(other *TimNodes) bool {
   if p == other {
     return true
@@ -5094,6 +5139,12 @@ func (p *TimNodes) Equals(other *TimNodes) bool {
   for k, _tgt := range p.Roommap {
     _src43 := other.Roommap[k]
     if !_tgt.Equals(_src43) { return false }
+  }
+  if p.Node != other.Node {
+    if p.Node == nil || other.Node == nil {
+      return false
+    }
+    if (*p.Node) != (*other.Node) { return false }
   }
   return true
 }
