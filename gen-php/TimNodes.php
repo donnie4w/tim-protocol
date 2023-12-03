@@ -61,6 +61,11 @@ class TimNodes
                 'class' => '\TimRoomBean',
                 ),
         ),
+        5 => array(
+            'var' => 'node',
+            'isRequired' => false,
+            'type' => TType::STRING,
+        ),
     );
 
     /**
@@ -79,6 +84,10 @@ class TimNodes
      * @var array
      */
     public $roommap = null;
+    /**
+     * @var string
+     */
+    public $node = null;
 
     public function __construct($vals = null)
     {
@@ -94,6 +103,9 @@ class TimNodes
             }
             if (isset($vals['roommap'])) {
                 $this->roommap = $vals['roommap'];
+            }
+            if (isset($vals['node'])) {
+                $this->node = $vals['node'];
             }
         }
     }
@@ -180,6 +192,13 @@ class TimNodes
                         $xfer += $input->skip($ftype);
                     }
                     break;
+                case 5:
+                    if ($ftype == TType::STRING) {
+                        $xfer += $input->readString($this->node);
+                    } else {
+                        $xfer += $input->skip($ftype);
+                    }
+                    break;
                 default:
                     $xfer += $input->skip($ftype);
                     break;
@@ -235,6 +254,11 @@ class TimNodes
                 $xfer += $viter135->write($output);
             }
             $output->writeMapEnd();
+            $xfer += $output->writeFieldEnd();
+        }
+        if ($this->node !== null) {
+            $xfer += $output->writeFieldBegin('node', TType::STRING, 5);
+            $xfer += $output->writeString($this->node);
             $xfer += $output->writeFieldEnd();
         }
         $xfer += $output->writeFieldStop();
