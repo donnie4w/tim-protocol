@@ -11,14 +11,16 @@ data class TimNodes(
   private var _ntype: kotlin.Int? = null,
   var nodelist: kotlin.collections.List<kotlin.String>? = null,
   var usermap: kotlin.collections.Map<kotlin.String, TimUserBean>? = null,
-  var roommap: kotlin.collections.Map<kotlin.String, TimRoomBean>? = null
+  var roommap: kotlin.collections.Map<kotlin.String, TimRoomBean>? = null,
+  var node: kotlin.String? = null
 ) : org.apache.thrift.TBase<TimNodes, TimNodes._Fields> {
   val ntype: kotlin.Int get() = _ntype!!
   enum class _Fields(private val thriftFieldId: kotlin.Short, private val fieldName: kotlin.String) : org.apache.thrift.TFieldIdEnum {
     NTYPE(1, "ntype"),
     NODELIST(2, "nodelist"),
     USERMAP(3, "usermap"),
-    ROOMMAP(4, "roommap");
+    ROOMMAP(4, "roommap"),
+    NODE(5, "node");
 
     override fun getThriftFieldId() = thriftFieldId
 
@@ -32,6 +34,7 @@ data class TimNodes(
           2 -> NODELIST
           3 -> USERMAP
           4 -> ROOMMAP
+          5 -> NODE
           else -> null
         }
       }
@@ -43,6 +46,7 @@ data class TimNodes(
           "nodelist" -> NODELIST
           "usermap" -> USERMAP
           "roommap" -> ROOMMAP
+          "node" -> NODE
           else -> null
         }
       }
@@ -80,11 +84,18 @@ data class TimNodes(
         org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING),
         org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, TimRoomBean::class.java)),
       emptyMap())
+    private val NODE_FIELD_DESC: org.apache.thrift.protocol.TField = org.apache.thrift.protocol.TField("node", org.apache.thrift.protocol.TType.STRING, 5)
+    private val NODE_FIELD_META_DATA: org.apache.thrift.meta_data.FieldMetaData = org.apache.thrift.meta_data.FieldMetaData(
+      "node",
+      org.apache.thrift.TFieldRequirementType.OPTIONAL,
+      org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING),
+      emptyMap())
     private val metadata: Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> = mapOf(
       _Fields.NTYPE to NTYPE_FIELD_META_DATA,
       _Fields.NODELIST to NODELIST_FIELD_META_DATA,
       _Fields.USERMAP to USERMAP_FIELD_META_DATA,
       _Fields.ROOMMAP to ROOMMAP_FIELD_META_DATA,
+      _Fields.NODE to NODE_FIELD_META_DATA,
     )
     init {
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(TimNodes::class.java, metadata)
@@ -140,6 +151,13 @@ data class TimNodes(
                     skipNext()
                   }
                 }
+                5 -> {
+                  if (it.type == org.apache.thrift.protocol.TType.STRING) {
+                    struct.node = readString()
+                  } else {
+                    skipNext()
+                  }
+                }
                 else -> skipNext()
               }
             }
@@ -181,6 +199,11 @@ data class TimNodes(
               }
             }
           }
+          struct.node?.let { node ->
+            writeField(NODE_FIELD_DESC) {
+              writeString(node)
+            }
+          }
           writeFieldStop()
         }
       }
@@ -194,6 +217,7 @@ data class TimNodes(
       .thenBy(org.apache.thrift.TBaseHelper::compareTo) { it.nodelist } 
       .thenBy(org.apache.thrift.TBaseHelper::compareTo) { it.usermap } 
       .thenBy(org.apache.thrift.TBaseHelper::compareTo) { it.roommap } 
+      .thenBy { it.node } 
     return nullsFirst(comparator).compare(this, other)
   }
 
@@ -207,6 +231,7 @@ data class TimNodes(
       _Fields.NODELIST -> this.nodelist
       _Fields.USERMAP -> this.usermap
       _Fields.ROOMMAP -> this.roommap
+      _Fields.NODE -> this.node
     }
   }
 
@@ -217,6 +242,7 @@ data class TimNodes(
       _Fields.NODELIST -> this.nodelist = value as kotlin.collections.List<kotlin.String>?
       _Fields.USERMAP -> this.usermap = value as kotlin.collections.Map<kotlin.String, TimUserBean>?
       _Fields.ROOMMAP -> this.roommap = value as kotlin.collections.Map<kotlin.String, TimRoomBean>?
+      _Fields.NODE -> this.node = value as kotlin.String?
     }
   }
 
@@ -226,6 +252,7 @@ data class TimNodes(
       _Fields.NODELIST -> this.nodelist != null
       _Fields.USERMAP -> this.usermap != null
       _Fields.ROOMMAP -> this.roommap != null
+      _Fields.NODE -> this.node != null
     }
   }
 
@@ -235,6 +262,7 @@ data class TimNodes(
       nodelist,
       usermap,
       roommap,
+      node,
     )
   }
 
@@ -243,6 +271,7 @@ data class TimNodes(
     nodelist = null
     usermap = null
     roommap = null
+    node = null
   }
 
   @kotlin.jvm.Throws(org.apache.thrift.TException::class)
