@@ -1836,6 +1836,7 @@ TimNodes = function(args) {
   this.nodelist = null;
   this.usermap = null;
   this.roommap = null;
+  this.node = null;
   if (args) {
     if (args.ntype !== undefined && args.ntype !== null) {
       this.ntype = args.ntype;
@@ -1850,6 +1851,9 @@ TimNodes = function(args) {
     }
     if (args.roommap !== undefined && args.roommap !== null) {
       this.roommap = Thrift.copyMap(args.roommap, [TimRoomBean]);
+    }
+    if (args.node !== undefined && args.node !== null) {
+      this.node = args.node;
     }
   }
 };
@@ -1932,6 +1936,13 @@ TimNodes.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 5:
+      if (ftype == Thrift.Type.STRING) {
+        this.node = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -1984,6 +1995,11 @@ TimNodes.prototype.write = function(output) {
       }
     }
     output.writeMapEnd();
+    output.writeFieldEnd();
+  }
+  if (this.node !== null && this.node !== undefined) {
+    output.writeFieldBegin('node', Thrift.Type.STRING, 5);
+    output.writeString(this.node);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
