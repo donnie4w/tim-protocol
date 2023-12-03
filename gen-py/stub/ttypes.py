@@ -1465,15 +1465,17 @@ class TimNodes(object):
      - nodelist
      - usermap
      - roommap
+     - node
 
     """
 
 
-    def __init__(self, ntype=None, nodelist=None, usermap=None, roommap=None,):
+    def __init__(self, ntype=None, nodelist=None, usermap=None, roommap=None, node=None,):
         self.ntype = ntype
         self.nodelist = nodelist
         self.usermap = usermap
         self.roommap = roommap
+        self.node = node
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -1523,6 +1525,11 @@ class TimNodes(object):
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
+            elif fid == 5:
+                if ftype == TType.STRING:
+                    self.node = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
             else:
                 iprot.skip(ftype)
             iprot.readFieldEnd()
@@ -1559,6 +1566,10 @@ class TimNodes(object):
                 oprot.writeString(kiter134.encode('utf-8') if sys.version_info[0] == 2 else kiter134)
                 viter135.write(oprot)
             oprot.writeMapEnd()
+            oprot.writeFieldEnd()
+        if self.node is not None:
+            oprot.writeFieldBegin('node', TType.STRING, 5)
+            oprot.writeString(self.node.encode('utf-8') if sys.version_info[0] == 2 else self.node)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -1779,6 +1790,7 @@ TimNodes.thrift_spec = (
     (2, TType.LIST, 'nodelist', (TType.STRING, 'UTF8', False), None, ),  # 2
     (3, TType.MAP, 'usermap', (TType.STRING, 'UTF8', TType.STRUCT, [TimUserBean, None], False), None, ),  # 3
     (4, TType.MAP, 'roommap', (TType.STRING, 'UTF8', TType.STRUCT, [TimRoomBean, None], False), None, ),  # 4
+    (5, TType.STRING, 'node', 'UTF8', None, ),  # 5
 )
 all_structs.append(TimMessageList)
 TimMessageList.thrift_spec = (
