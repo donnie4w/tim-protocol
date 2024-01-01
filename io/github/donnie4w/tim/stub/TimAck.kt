@@ -12,7 +12,9 @@ data class TimAck(
   private var _timType: kotlin.Byte? = null,
   var error: TimError? = null,
   var t: kotlin.Long? = null,
-  var n: kotlin.String? = null
+  var n: kotlin.String? = null,
+  var t2: kotlin.Long? = null,
+  var n2: kotlin.String? = null
 ) : org.apache.thrift.TBase<TimAck, TimAck._Fields> {
   val ok: kotlin.Boolean get() = _ok!!
   val timType: kotlin.Byte get() = _timType!!
@@ -21,7 +23,9 @@ data class TimAck(
     TIM_TYPE(2, "timType"),
     ERROR(3, "error"),
     T(4, "t"),
-    N(5, "n");
+    N(5, "n"),
+    T2(6, "t2"),
+    N2(7, "n2");
 
     override fun getThriftFieldId() = thriftFieldId
 
@@ -36,6 +40,8 @@ data class TimAck(
           3 -> ERROR
           4 -> T
           5 -> N
+          6 -> T2
+          7 -> N2
           else -> null
         }
       }
@@ -48,6 +54,8 @@ data class TimAck(
           "error" -> ERROR
           "t" -> T
           "n" -> N
+          "t2" -> T2
+          "n2" -> N2
           else -> null
         }
       }
@@ -86,12 +94,26 @@ data class TimAck(
       org.apache.thrift.TFieldRequirementType.OPTIONAL,
       org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING),
       emptyMap())
+    private val T2_FIELD_DESC: org.apache.thrift.protocol.TField = org.apache.thrift.protocol.TField("t2", org.apache.thrift.protocol.TType.I64, 6)
+    private val T2_FIELD_META_DATA: org.apache.thrift.meta_data.FieldMetaData = org.apache.thrift.meta_data.FieldMetaData(
+      "t2",
+      org.apache.thrift.TFieldRequirementType.OPTIONAL,
+      org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64),
+      emptyMap())
+    private val N2_FIELD_DESC: org.apache.thrift.protocol.TField = org.apache.thrift.protocol.TField("n2", org.apache.thrift.protocol.TType.STRING, 7)
+    private val N2_FIELD_META_DATA: org.apache.thrift.meta_data.FieldMetaData = org.apache.thrift.meta_data.FieldMetaData(
+      "n2",
+      org.apache.thrift.TFieldRequirementType.OPTIONAL,
+      org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING),
+      emptyMap())
     private val metadata: Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> = mapOf(
       _Fields.OK to OK_FIELD_META_DATA,
       _Fields.TIM_TYPE to TIM_TYPE_FIELD_META_DATA,
       _Fields.ERROR to ERROR_FIELD_META_DATA,
       _Fields.T to T_FIELD_META_DATA,
       _Fields.N to N_FIELD_META_DATA,
+      _Fields.T2 to T2_FIELD_META_DATA,
+      _Fields.N2 to N2_FIELD_META_DATA,
     )
     init {
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(TimAck::class.java, metadata)
@@ -142,6 +164,20 @@ data class TimAck(
                     skipNext()
                   }
                 }
+                6 -> {
+                  if (it.type == org.apache.thrift.protocol.TType.I64) {
+                    struct.t2 = readI64()
+                  } else {
+                    skipNext()
+                  }
+                }
+                7 -> {
+                  if (it.type == org.apache.thrift.protocol.TType.STRING) {
+                    struct.n2 = readString()
+                  } else {
+                    skipNext()
+                  }
+                }
                 else -> skipNext()
               }
             }
@@ -180,6 +216,16 @@ data class TimAck(
               writeString(n)
             }
           }
+          struct.t2?.let { t2 ->
+            writeField(T2_FIELD_DESC) {
+              writeI64(t2)
+            }
+          }
+          struct.n2?.let { n2 ->
+            writeField(N2_FIELD_DESC) {
+              writeString(n2)
+            }
+          }
           writeFieldStop()
         }
       }
@@ -194,6 +240,8 @@ data class TimAck(
       .thenBy { it.error } 
       .thenBy { it.t } 
       .thenBy { it.n } 
+      .thenBy { it.t2 } 
+      .thenBy { it.n2 } 
     return nullsFirst(comparator).compare(this, other)
   }
 
@@ -208,6 +256,8 @@ data class TimAck(
       _Fields.ERROR -> this.error
       _Fields.T -> this.t
       _Fields.N -> this.n
+      _Fields.T2 -> this.t2
+      _Fields.N2 -> this.n2
     }
   }
 
@@ -219,6 +269,8 @@ data class TimAck(
       _Fields.ERROR -> this.error = value as TimError?
       _Fields.T -> this.t = value as kotlin.Long?
       _Fields.N -> this.n = value as kotlin.String?
+      _Fields.T2 -> this.t2 = value as kotlin.Long?
+      _Fields.N2 -> this.n2 = value as kotlin.String?
     }
   }
 
@@ -229,6 +281,8 @@ data class TimAck(
       _Fields.ERROR -> this.error != null
       _Fields.T -> this.t != null
       _Fields.N -> this.n != null
+      _Fields.T2 -> this.t2 != null
+      _Fields.N2 -> this.n2 != null
     }
   }
 
@@ -239,6 +293,8 @@ data class TimAck(
       error,
       t,
       n,
+      t2,
+      n2,
     )
   }
 
@@ -248,6 +304,8 @@ data class TimAck(
     error = null
     t = null
     n = null
+    t2 = null
+    n2 = null
   }
 
   @kotlin.jvm.Throws(org.apache.thrift.TException::class)
