@@ -14,6 +14,7 @@ data class TimRoomBean(
   var topic: kotlin.String? = null,
   var label: kotlin.String? = null,
   var gtype: kotlin.Byte? = null,
+  var kind: kotlin.Long? = null,
   var createtime: kotlin.Long? = null,
   var extend: kotlin.collections.Map<kotlin.String, kotlin.String>? = null,
   var extra: kotlin.collections.Map<kotlin.String, kotlin.ByteArray>? = null
@@ -25,9 +26,10 @@ data class TimRoomBean(
     TOPIC(4, "topic"),
     LABEL(5, "label"),
     GTYPE(6, "gtype"),
-    CREATETIME(7, "createtime"),
-    EXTEND(8, "extend"),
-    EXTRA(9, "extra");
+    KIND(7, "kind"),
+    CREATETIME(8, "createtime"),
+    EXTEND(9, "extend"),
+    EXTRA(10, "extra");
 
     override fun getThriftFieldId() = thriftFieldId
 
@@ -43,9 +45,10 @@ data class TimRoomBean(
           4 -> TOPIC
           5 -> LABEL
           6 -> GTYPE
-          7 -> CREATETIME
-          8 -> EXTEND
-          9 -> EXTRA
+          7 -> KIND
+          8 -> CREATETIME
+          9 -> EXTEND
+          10 -> EXTRA
           else -> null
         }
       }
@@ -59,6 +62,7 @@ data class TimRoomBean(
           "topic" -> TOPIC
           "label" -> LABEL
           "gtype" -> GTYPE
+          "kind" -> KIND
           "createtime" -> CREATETIME
           "extend" -> EXTEND
           "extra" -> EXTRA
@@ -107,13 +111,19 @@ data class TimRoomBean(
       org.apache.thrift.TFieldRequirementType.OPTIONAL,
       org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BYTE),
       emptyMap())
-    private val CREATETIME_FIELD_DESC: org.apache.thrift.protocol.TField = org.apache.thrift.protocol.TField("createtime", org.apache.thrift.protocol.TType.I64, 7)
+    private val KIND_FIELD_DESC: org.apache.thrift.protocol.TField = org.apache.thrift.protocol.TField("kind", org.apache.thrift.protocol.TType.I64, 7)
+    private val KIND_FIELD_META_DATA: org.apache.thrift.meta_data.FieldMetaData = org.apache.thrift.meta_data.FieldMetaData(
+      "kind",
+      org.apache.thrift.TFieldRequirementType.OPTIONAL,
+      org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64),
+      emptyMap())
+    private val CREATETIME_FIELD_DESC: org.apache.thrift.protocol.TField = org.apache.thrift.protocol.TField("createtime", org.apache.thrift.protocol.TType.I64, 8)
     private val CREATETIME_FIELD_META_DATA: org.apache.thrift.meta_data.FieldMetaData = org.apache.thrift.meta_data.FieldMetaData(
       "createtime",
       org.apache.thrift.TFieldRequirementType.OPTIONAL,
       org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64),
       emptyMap())
-    private val EXTEND_FIELD_DESC: org.apache.thrift.protocol.TField = org.apache.thrift.protocol.TField("extend", org.apache.thrift.protocol.TType.MAP, 8)
+    private val EXTEND_FIELD_DESC: org.apache.thrift.protocol.TField = org.apache.thrift.protocol.TField("extend", org.apache.thrift.protocol.TType.MAP, 9)
     private val EXTEND_FIELD_META_DATA: org.apache.thrift.meta_data.FieldMetaData = org.apache.thrift.meta_data.FieldMetaData(
       "extend",
       org.apache.thrift.TFieldRequirementType.OPTIONAL,
@@ -121,7 +131,7 @@ data class TimRoomBean(
         org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING),
         org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)),
       emptyMap())
-    private val EXTRA_FIELD_DESC: org.apache.thrift.protocol.TField = org.apache.thrift.protocol.TField("extra", org.apache.thrift.protocol.TType.MAP, 9)
+    private val EXTRA_FIELD_DESC: org.apache.thrift.protocol.TField = org.apache.thrift.protocol.TField("extra", org.apache.thrift.protocol.TType.MAP, 10)
     private val EXTRA_FIELD_META_DATA: org.apache.thrift.meta_data.FieldMetaData = org.apache.thrift.meta_data.FieldMetaData(
       "extra",
       org.apache.thrift.TFieldRequirementType.OPTIONAL,
@@ -136,6 +146,7 @@ data class TimRoomBean(
       _Fields.TOPIC to TOPIC_FIELD_META_DATA,
       _Fields.LABEL to LABEL_FIELD_META_DATA,
       _Fields.GTYPE to GTYPE_FIELD_META_DATA,
+      _Fields.KIND to KIND_FIELD_META_DATA,
       _Fields.CREATETIME to CREATETIME_FIELD_META_DATA,
       _Fields.EXTEND to EXTEND_FIELD_META_DATA,
       _Fields.EXTRA to EXTRA_FIELD_META_DATA,
@@ -202,12 +213,19 @@ data class TimRoomBean(
                 }
                 7 -> {
                   if (it.type == org.apache.thrift.protocol.TType.I64) {
-                    struct.createtime = readI64()
+                    struct.kind = readI64()
                   } else {
                     skipNext()
                   }
                 }
                 8 -> {
+                  if (it.type == org.apache.thrift.protocol.TType.I64) {
+                    struct.createtime = readI64()
+                  } else {
+                    skipNext()
+                  }
+                }
+                9 -> {
                   if (it.type == org.apache.thrift.protocol.TType.MAP) {
                     struct.extend = readMap { tmap ->
                       kotlin.collections.List(tmap.size) {
@@ -218,7 +236,7 @@ data class TimRoomBean(
                     skipNext()
                   }
                 }
-                9 -> {
+                10 -> {
                   if (it.type == org.apache.thrift.protocol.TType.MAP) {
                     struct.extra = readMap { tmap ->
                       kotlin.collections.List(tmap.size) {
@@ -274,6 +292,11 @@ data class TimRoomBean(
               writeByte(gtype)
             }
           }
+          struct.kind?.let { kind ->
+            writeField(KIND_FIELD_DESC) {
+              writeI64(kind)
+            }
+          }
           struct.createtime?.let { createtime ->
             writeField(CREATETIME_FIELD_DESC) {
               writeI64(createtime)
@@ -310,6 +333,7 @@ data class TimRoomBean(
       .thenBy { it.topic } 
       .thenBy { it.label } 
       .thenBy { it.gtype } 
+      .thenBy { it.kind } 
       .thenBy { it.createtime } 
       .thenBy(org.apache.thrift.TBaseHelper::compareTo) { it.extend } 
       .thenBy(org.apache.thrift.TBaseHelper::compareTo) { it.extra } 
@@ -328,6 +352,7 @@ data class TimRoomBean(
       _Fields.TOPIC -> this.topic
       _Fields.LABEL -> this.label
       _Fields.GTYPE -> this.gtype
+      _Fields.KIND -> this.kind
       _Fields.CREATETIME -> this.createtime
       _Fields.EXTEND -> this.extend
       _Fields.EXTRA -> this.extra
@@ -343,6 +368,7 @@ data class TimRoomBean(
       _Fields.TOPIC -> this.topic = value as kotlin.String?
       _Fields.LABEL -> this.label = value as kotlin.String?
       _Fields.GTYPE -> this.gtype = value as kotlin.Byte?
+      _Fields.KIND -> this.kind = value as kotlin.Long?
       _Fields.CREATETIME -> this.createtime = value as kotlin.Long?
       _Fields.EXTEND -> this.extend = value as kotlin.collections.Map<kotlin.String, kotlin.String>?
       _Fields.EXTRA -> this.extra = value as kotlin.collections.Map<kotlin.String, kotlin.ByteArray>?
@@ -357,6 +383,7 @@ data class TimRoomBean(
       _Fields.TOPIC -> this.topic != null
       _Fields.LABEL -> this.label != null
       _Fields.GTYPE -> this.gtype != null
+      _Fields.KIND -> this.kind != null
       _Fields.CREATETIME -> this.createtime != null
       _Fields.EXTEND -> this.extend != null
       _Fields.EXTRA -> this.extra != null
@@ -371,6 +398,7 @@ data class TimRoomBean(
       topic,
       label,
       gtype,
+      kind,
       createtime,
       extend,
       extra,
@@ -384,6 +412,7 @@ data class TimRoomBean(
     topic = null
     label = null
     gtype = null
+    kind = null
     createtime = null
     extend = null
     extra = null
