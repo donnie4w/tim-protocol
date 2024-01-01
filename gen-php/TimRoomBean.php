@@ -54,11 +54,16 @@ class TimRoomBean
             'type' => TType::BYTE,
         ),
         7 => array(
-            'var' => 'createtime',
+            'var' => 'kind',
             'isRequired' => false,
             'type' => TType::I64,
         ),
         8 => array(
+            'var' => 'createtime',
+            'isRequired' => false,
+            'type' => TType::I64,
+        ),
+        9 => array(
             'var' => 'extend',
             'isRequired' => false,
             'type' => TType::MAP,
@@ -71,7 +76,7 @@ class TimRoomBean
                 'type' => TType::STRING,
                 ),
         ),
-        9 => array(
+        10 => array(
             'var' => 'extra',
             'isRequired' => false,
             'type' => TType::MAP,
@@ -113,6 +118,10 @@ class TimRoomBean
     /**
      * @var int
      */
+    public $kind = null;
+    /**
+     * @var int
+     */
     public $createtime = null;
     /**
      * @var array
@@ -143,6 +152,9 @@ class TimRoomBean
             }
             if (isset($vals['gtype'])) {
                 $this->gtype = $vals['gtype'];
+            }
+            if (isset($vals['kind'])) {
+                $this->kind = $vals['kind'];
             }
             if (isset($vals['createtime'])) {
                 $this->createtime = $vals['createtime'];
@@ -228,12 +240,19 @@ class TimRoomBean
                     break;
                 case 7:
                     if ($ftype == TType::I64) {
-                        $xfer += $input->readI64($this->createtime);
+                        $xfer += $input->readI64($this->kind);
                     } else {
                         $xfer += $input->skip($ftype);
                     }
                     break;
                 case 8:
+                    if ($ftype == TType::I64) {
+                        $xfer += $input->readI64($this->createtime);
+                    } else {
+                        $xfer += $input->skip($ftype);
+                    }
+                    break;
+                case 9:
                     if ($ftype == TType::MAP) {
                         $this->extend = array();
                         $_size40 = 0;
@@ -252,7 +271,7 @@ class TimRoomBean
                         $xfer += $input->skip($ftype);
                     }
                     break;
-                case 9:
+                case 10:
                     if ($ftype == TType::MAP) {
                         $this->extra = array();
                         $_size47 = 0;
@@ -322,8 +341,13 @@ class TimRoomBean
             $xfer += $output->writeByte($this->gtype);
             $xfer += $output->writeFieldEnd();
         }
+        if ($this->kind !== null) {
+            $xfer += $output->writeFieldBegin('kind', TType::I64, 7);
+            $xfer += $output->writeI64($this->kind);
+            $xfer += $output->writeFieldEnd();
+        }
         if ($this->createtime !== null) {
-            $xfer += $output->writeFieldBegin('createtime', TType::I64, 7);
+            $xfer += $output->writeFieldBegin('createtime', TType::I64, 8);
             $xfer += $output->writeI64($this->createtime);
             $xfer += $output->writeFieldEnd();
         }
@@ -331,7 +355,7 @@ class TimRoomBean
             if (!is_array($this->extend)) {
                 throw new TProtocolException('Bad type in structure.', TProtocolException::INVALID_DATA);
             }
-            $xfer += $output->writeFieldBegin('extend', TType::MAP, 8);
+            $xfer += $output->writeFieldBegin('extend', TType::MAP, 9);
             $output->writeMapBegin(TType::STRING, TType::STRING, count($this->extend));
             foreach ($this->extend as $kiter55 => $viter56) {
                 $xfer += $output->writeString($kiter55);
@@ -344,7 +368,7 @@ class TimRoomBean
             if (!is_array($this->extra)) {
                 throw new TProtocolException('Bad type in structure.', TProtocolException::INVALID_DATA);
             }
-            $xfer += $output->writeFieldBegin('extra', TType::MAP, 9);
+            $xfer += $output->writeFieldBegin('extra', TType::MAP, 10);
             $output->writeMapBegin(TType::STRING, TType::STRING, count($this->extra));
             foreach ($this->extra as $kiter57 => $viter58) {
                 $xfer += $output->writeString($kiter57);
