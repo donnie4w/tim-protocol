@@ -61,7 +61,9 @@ TimAck = __TObject:new{
   timType,
   error,
   t,
-  n
+  n,
+  t2,
+  n2
 }
 
 function TimAck:read(iprot)
@@ -101,6 +103,18 @@ function TimAck:read(iprot)
       else
         iprot:skip(ftype)
       end
+    elseif fid == 6 then
+      if ftype == TType.I64 then
+        self.t2 = iprot:readI64()
+      else
+        iprot:skip(ftype)
+      end
+    elseif fid == 7 then
+      if ftype == TType.STRING then
+        self.n2 = iprot:readString()
+      else
+        iprot:skip(ftype)
+      end
     else
       iprot:skip(ftype)
     end
@@ -134,6 +148,16 @@ function TimAck:write(oprot)
   if self.n ~= nil then
     oprot:writeFieldBegin('n', TType.STRING, 5)
     oprot:writeString(self.n)
+    oprot:writeFieldEnd()
+  end
+  if self.t2 ~= nil then
+    oprot:writeFieldBegin('t2', TType.I64, 6)
+    oprot:writeI64(self.t2)
+    oprot:writeFieldEnd()
+  end
+  if self.n2 ~= nil then
+    oprot:writeFieldBegin('n2', TType.STRING, 7)
+    oprot:writeString(self.n2)
     oprot:writeFieldEnd()
   end
   oprot:writeFieldStop()
@@ -526,6 +550,7 @@ TimRoomBean = __TObject:new{
   topic,
   label,
   gtype,
+  kind,
   createtime,
   extend,
   extra
@@ -581,11 +606,17 @@ function TimRoomBean:read(iprot)
       end
     elseif fid == 7 then
       if ftype == TType.I64 then
-        self.createtime = iprot:readI64()
+        self.kind = iprot:readI64()
       else
         iprot:skip(ftype)
       end
     elseif fid == 8 then
+      if ftype == TType.I64 then
+        self.createtime = iprot:readI64()
+      else
+        iprot:skip(ftype)
+      end
+    elseif fid == 9 then
       if ftype == TType.MAP then
         self.extend = {}
         local _ktype36, _vtype37, _size35 = iprot:readMapBegin() 
@@ -598,7 +629,7 @@ function TimRoomBean:read(iprot)
       else
         iprot:skip(ftype)
       end
-    elseif fid == 9 then
+    elseif fid == 10 then
       if ftype == TType.MAP then
         self.extra = {}
         local _ktype42, _vtype43, _size41 = iprot:readMapBegin() 
@@ -655,13 +686,18 @@ function TimRoomBean:write(oprot)
     oprot:writeByte(self.gtype)
     oprot:writeFieldEnd()
   end
+  if self.kind ~= nil then
+    oprot:writeFieldBegin('kind', TType.I64, 7)
+    oprot:writeI64(self.kind)
+    oprot:writeFieldEnd()
+  end
   if self.createtime ~= nil then
-    oprot:writeFieldBegin('createtime', TType.I64, 7)
+    oprot:writeFieldBegin('createtime', TType.I64, 8)
     oprot:writeI64(self.createtime)
     oprot:writeFieldEnd()
   end
   if self.extend ~= nil then
-    oprot:writeFieldBegin('extend', TType.MAP, 8)
+    oprot:writeFieldBegin('extend', TType.MAP, 9)
     oprot:writeMapBegin(TType.STRING, TType.STRING, ttable_size(self.extend))
     for kiter48,viter49 in pairs(self.extend) do
       oprot:writeString(kiter48)
@@ -671,7 +707,7 @@ function TimRoomBean:write(oprot)
     oprot:writeFieldEnd()
   end
   if self.extra ~= nil then
-    oprot:writeFieldBegin('extra', TType.MAP, 9)
+    oprot:writeFieldBegin('extra', TType.MAP, 10)
     oprot:writeMapBegin(TType.STRING, TType.STRING, ttable_size(self.extra))
     for kiter50,viter51 in pairs(self.extra) do
       oprot:writeString(kiter50)
