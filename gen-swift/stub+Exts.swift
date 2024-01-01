@@ -78,7 +78,9 @@ public func ==(lhs: TimAck, rhs: TimAck) -> Bool {
     (lhs.timType == rhs.timType) &&
     (lhs.error == rhs.error) &&
     (lhs.t == rhs.t) &&
-    (lhs.n == rhs.n)
+    (lhs.n == rhs.n) &&
+    (lhs.t2 == rhs.t2) &&
+    (lhs.n2 == rhs.n2)
 }
 
 extension TimAck : CustomStringConvertible {
@@ -89,7 +91,9 @@ extension TimAck : CustomStringConvertible {
     desc += "timType=\(String(describing: self.timType)), "
     desc += "error=\(String(describing: self.error)), "
     desc += "t=\(String(describing: self.t)), "
-    desc += "n=\(String(describing: self.n))"
+    desc += "n=\(String(describing: self.n)), "
+    desc += "t2=\(String(describing: self.t2)), "
+    desc += "n2=\(String(describing: self.n2))"
     return desc
   }
 
@@ -103,6 +107,8 @@ extension TimAck : Hashable {
     hasher.combine(error)
     hasher.combine(t)
     hasher.combine(n)
+    hasher.combine(t2)
+    hasher.combine(n2)
   }
 
 }
@@ -110,7 +116,7 @@ extension TimAck : Hashable {
 extension TimAck : TStruct {
 
   public static var fieldIds: [String: Int32] {
-    return ["ok": 1, "timType": 2, "error": 3, "t": 4, "n": 5, ]
+    return ["ok": 1, "timType": 2, "error": 3, "t": 4, "n": 5, "t2": 6, "n2": 7, ]
   }
 
   public static var structName: String { return "TimAck" }
@@ -122,6 +128,8 @@ extension TimAck : TStruct {
     var error: TimError?
     var t: Int64?
     var n: String?
+    var t2: Int64?
+    var n2: String?
 
     fields: while true {
 
@@ -134,6 +142,8 @@ extension TimAck : TStruct {
         case (3, .struct):           error = try TimError.read(from: proto)
         case (4, .i64):             t = try Int64.read(from: proto)
         case (5, .string):           n = try String.read(from: proto)
+        case (6, .i64):             t2 = try Int64.read(from: proto)
+        case (7, .string):           n2 = try String.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -145,7 +155,7 @@ extension TimAck : TStruct {
     try proto.validateValue(ok, named: "ok")
     try proto.validateValue(timType, named: "timType")
 
-    return TimAck(ok: ok, timType: timType, error: error, t: t, n: n)
+    return TimAck(ok: ok, timType: timType, error: error, t: t, n: n, t2: t2, n2: n2)
   }
 
 }
@@ -428,6 +438,7 @@ public func ==(lhs: TimRoomBean, rhs: TimRoomBean) -> Bool {
     (lhs.topic == rhs.topic) &&
     (lhs.label == rhs.label) &&
     (lhs.gtype == rhs.gtype) &&
+    (lhs.kind == rhs.kind) &&
     (lhs.createtime == rhs.createtime) &&
     (lhs.extend == rhs.extend) &&
     (lhs.extra == rhs.extra)
@@ -443,6 +454,7 @@ extension TimRoomBean : CustomStringConvertible {
     desc += "topic=\(String(describing: self.topic)), "
     desc += "label=\(String(describing: self.label)), "
     desc += "gtype=\(String(describing: self.gtype)), "
+    desc += "kind=\(String(describing: self.kind)), "
     desc += "createtime=\(String(describing: self.createtime)), "
     desc += "extend=\(String(describing: self.extend)), "
     desc += "extra=\(String(describing: self.extra))"
@@ -460,6 +472,7 @@ extension TimRoomBean : Hashable {
     hasher.combine(topic)
     hasher.combine(label)
     hasher.combine(gtype)
+    hasher.combine(kind)
     hasher.combine(createtime)
     hasher.combine(extend)
     hasher.combine(extra)
@@ -470,7 +483,7 @@ extension TimRoomBean : Hashable {
 extension TimRoomBean : TStruct {
 
   public static var fieldIds: [String: Int32] {
-    return ["founder": 1, "managers": 2, "cover": 3, "topic": 4, "label": 5, "gtype": 6, "createtime": 7, "extend": 8, "extra": 9, ]
+    return ["founder": 1, "managers": 2, "cover": 3, "topic": 4, "label": 5, "gtype": 6, "kind": 7, "createtime": 8, "extend": 9, "extra": 10, ]
   }
 
   public static var structName: String { return "TimRoomBean" }
@@ -483,6 +496,7 @@ extension TimRoomBean : TStruct {
     var topic: String?
     var label: String?
     var gtype: Int8?
+    var kind: Int64?
     var createtime: Int64?
     var extend: TMap<String, String>?
     var extra: TMap<String, Data>?
@@ -499,9 +513,10 @@ extension TimRoomBean : TStruct {
         case (4, .string):           topic = try String.read(from: proto)
         case (5, .string):           label = try String.read(from: proto)
         case (6, .i8):            gtype = try Int8.read(from: proto)
-        case (7, .i64):             createtime = try Int64.read(from: proto)
-        case (8, .map):             extend = try TMap<String, String>.read(from: proto)
-        case (9, .map):             extra = try TMap<String, Data>.read(from: proto)
+        case (7, .i64):             kind = try Int64.read(from: proto)
+        case (8, .i64):             createtime = try Int64.read(from: proto)
+        case (9, .map):             extend = try TMap<String, String>.read(from: proto)
+        case (10, .map):             extra = try TMap<String, Data>.read(from: proto)
         case let (_, unknownType):  try proto.skip(type: unknownType)
       }
 
@@ -510,7 +525,7 @@ extension TimRoomBean : TStruct {
 
     try proto.readStructEnd()
 
-    return TimRoomBean(founder: founder, managers: managers, cover: cover, topic: topic, label: label, gtype: gtype, createtime: createtime, extend: extend, extra: extra)
+    return TimRoomBean(founder: founder, managers: managers, cover: cover, topic: topic, label: label, gtype: gtype, kind: kind, createtime: createtime, extend: extend, extra: extra)
   }
 
 }
