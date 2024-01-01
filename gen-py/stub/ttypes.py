@@ -92,16 +92,20 @@ class TimAck(object):
      - error
      - t
      - n
+     - t2
+     - n2
 
     """
 
 
-    def __init__(self, ok=None, timType=None, error=None, t=None, n=None,):
+    def __init__(self, ok=None, timType=None, error=None, t=None, n=None, t2=None, n2=None,):
         self.ok = ok
         self.timType = timType
         self.error = error
         self.t = t
         self.n = n
+        self.t2 = t2
+        self.n2 = n2
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -138,6 +142,16 @@ class TimAck(object):
                     self.n = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
+            elif fid == 6:
+                if ftype == TType.I64:
+                    self.t2 = iprot.readI64()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 7:
+                if ftype == TType.STRING:
+                    self.n2 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
             else:
                 iprot.skip(ftype)
             iprot.readFieldEnd()
@@ -167,6 +181,14 @@ class TimAck(object):
         if self.n is not None:
             oprot.writeFieldBegin('n', TType.STRING, 5)
             oprot.writeString(self.n.encode('utf-8') if sys.version_info[0] == 2 else self.n)
+            oprot.writeFieldEnd()
+        if self.t2 is not None:
+            oprot.writeFieldBegin('t2', TType.I64, 6)
+            oprot.writeI64(self.t2)
+            oprot.writeFieldEnd()
+        if self.n2 is not None:
+            oprot.writeFieldBegin('n2', TType.STRING, 7)
+            oprot.writeString(self.n2.encode('utf-8') if sys.version_info[0] == 2 else self.n2)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -619,6 +641,7 @@ class TimRoomBean(object):
      - topic
      - label
      - gtype
+     - kind
      - createtime
      - extend
      - extra
@@ -626,13 +649,14 @@ class TimRoomBean(object):
     """
 
 
-    def __init__(self, founder=None, managers=None, cover=None, topic=None, label=None, gtype=None, createtime=None, extend=None, extra=None,):
+    def __init__(self, founder=None, managers=None, cover=None, topic=None, label=None, gtype=None, kind=None, createtime=None, extend=None, extra=None,):
         self.founder = founder
         self.managers = managers
         self.cover = cover
         self.topic = topic
         self.label = label
         self.gtype = gtype
+        self.kind = kind
         self.createtime = createtime
         self.extend = extend
         self.extra = extra
@@ -683,10 +707,15 @@ class TimRoomBean(object):
                     iprot.skip(ftype)
             elif fid == 7:
                 if ftype == TType.I64:
-                    self.createtime = iprot.readI64()
+                    self.kind = iprot.readI64()
                 else:
                     iprot.skip(ftype)
             elif fid == 8:
+                if ftype == TType.I64:
+                    self.createtime = iprot.readI64()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 9:
                 if ftype == TType.MAP:
                     self.extend = {}
                     (_ktype41, _vtype42, _size40) = iprot.readMapBegin()
@@ -697,7 +726,7 @@ class TimRoomBean(object):
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
-            elif fid == 9:
+            elif fid == 10:
                 if ftype == TType.MAP:
                     self.extra = {}
                     (_ktype48, _vtype49, _size47) = iprot.readMapBegin()
@@ -745,12 +774,16 @@ class TimRoomBean(object):
             oprot.writeFieldBegin('gtype', TType.BYTE, 6)
             oprot.writeByte(self.gtype)
             oprot.writeFieldEnd()
+        if self.kind is not None:
+            oprot.writeFieldBegin('kind', TType.I64, 7)
+            oprot.writeI64(self.kind)
+            oprot.writeFieldEnd()
         if self.createtime is not None:
-            oprot.writeFieldBegin('createtime', TType.I64, 7)
+            oprot.writeFieldBegin('createtime', TType.I64, 8)
             oprot.writeI64(self.createtime)
             oprot.writeFieldEnd()
         if self.extend is not None:
-            oprot.writeFieldBegin('extend', TType.MAP, 8)
+            oprot.writeFieldBegin('extend', TType.MAP, 9)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.extend))
             for kiter55, viter56 in self.extend.items():
                 oprot.writeString(kiter55.encode('utf-8') if sys.version_info[0] == 2 else kiter55)
@@ -758,7 +791,7 @@ class TimRoomBean(object):
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
         if self.extra is not None:
-            oprot.writeFieldBegin('extra', TType.MAP, 9)
+            oprot.writeFieldBegin('extra', TType.MAP, 10)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.extra))
             for kiter57, viter58 in self.extra.items():
                 oprot.writeString(kiter57.encode('utf-8') if sys.version_info[0] == 2 else kiter57)
@@ -1680,6 +1713,8 @@ TimAck.thrift_spec = (
     (3, TType.STRUCT, 'error', [TimError, None], None, ),  # 3
     (4, TType.I64, 't', None, None, ),  # 4
     (5, TType.STRING, 'n', 'UTF8', None, ),  # 5
+    (6, TType.I64, 't2', None, None, ),  # 6
+    (7, TType.STRING, 'n2', 'UTF8', None, ),  # 7
 )
 all_structs.append(TimReq)
 TimReq.thrift_spec = (
@@ -1725,9 +1760,10 @@ TimRoomBean.thrift_spec = (
     (4, TType.STRING, 'topic', 'UTF8', None, ),  # 4
     (5, TType.STRING, 'label', 'UTF8', None, ),  # 5
     (6, TType.BYTE, 'gtype', None, None, ),  # 6
-    (7, TType.I64, 'createtime', None, None, ),  # 7
-    (8, TType.MAP, 'extend', (TType.STRING, 'UTF8', TType.STRING, 'UTF8', False), None, ),  # 8
-    (9, TType.MAP, 'extra', (TType.STRING, 'UTF8', TType.STRING, 'BINARY', False), None, ),  # 9
+    (7, TType.I64, 'kind', None, None, ),  # 7
+    (8, TType.I64, 'createtime', None, None, ),  # 8
+    (9, TType.MAP, 'extend', (TType.STRING, 'UTF8', TType.STRING, 'UTF8', False), None, ),  # 9
+    (10, TType.MAP, 'extra', (TType.STRING, 'UTF8', TType.STRING, 'BINARY', False), None, ),  # 10
 )
 all_structs.append(TimAuth)
 TimAuth.thrift_spec = (
