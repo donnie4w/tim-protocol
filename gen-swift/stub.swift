@@ -37,18 +37,24 @@ public final class TimAck {
 
   public var n: String?
 
+  public var t2: Int64?
+
+  public var n2: String?
+
 
   public init(ok: Bool, timType: Int8) {
     self.ok = ok
     self.timType = timType
   }
 
-  public init(ok: Bool, timType: Int8, error: TimError?, t: Int64?, n: String?) {
+  public init(ok: Bool, timType: Int8, error: TimError?, t: Int64?, n: String?, t2: Int64?, n2: String?) {
     self.ok = ok
     self.timType = timType
     self.error = error
     self.t = t
     self.n = n
+    self.t2 = t2
+    self.n2 = n2
   }
 
 }
@@ -163,6 +169,8 @@ public final class TimRoomBean {
 
   public var gtype: Int8?
 
+  public var kind: Int64?
+
   public var createtime: Int64?
 
   public var extend: TMap<String, String>?
@@ -171,13 +179,14 @@ public final class TimRoomBean {
 
 
   public init() { }
-  public init(founder: String?, managers: TList<String>?, cover: String?, topic: String?, label: String?, gtype: Int8?, createtime: Int64?, extend: TMap<String, String>?, extra: TMap<String, Data>?) {
+  public init(founder: String?, managers: TList<String>?, cover: String?, topic: String?, label: String?, gtype: Int8?, kind: Int64?, createtime: Int64?, extend: TMap<String, String>?, extra: TMap<String, Data>?) {
     self.founder = founder
     self.managers = managers
     self.cover = cover
     self.topic = topic
     self.label = label
     self.gtype = gtype
+    self.kind = kind
     self.createtime = createtime
     self.extend = extend
     self.extra = extra
