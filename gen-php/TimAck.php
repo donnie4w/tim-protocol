@@ -45,6 +45,16 @@ class TimAck
             'isRequired' => false,
             'type' => TType::STRING,
         ),
+        6 => array(
+            'var' => 't2',
+            'isRequired' => false,
+            'type' => TType::I64,
+        ),
+        7 => array(
+            'var' => 'n2',
+            'isRequired' => false,
+            'type' => TType::STRING,
+        ),
     );
 
     /**
@@ -67,6 +77,14 @@ class TimAck
      * @var string
      */
     public $n = null;
+    /**
+     * @var int
+     */
+    public $t2 = null;
+    /**
+     * @var string
+     */
+    public $n2 = null;
 
     public function __construct($vals = null)
     {
@@ -85,6 +103,12 @@ class TimAck
             }
             if (isset($vals['n'])) {
                 $this->n = $vals['n'];
+            }
+            if (isset($vals['t2'])) {
+                $this->t2 = $vals['t2'];
+            }
+            if (isset($vals['n2'])) {
+                $this->n2 = $vals['n2'];
             }
         }
     }
@@ -144,6 +168,20 @@ class TimAck
                         $xfer += $input->skip($ftype);
                     }
                     break;
+                case 6:
+                    if ($ftype == TType::I64) {
+                        $xfer += $input->readI64($this->t2);
+                    } else {
+                        $xfer += $input->skip($ftype);
+                    }
+                    break;
+                case 7:
+                    if ($ftype == TType::STRING) {
+                        $xfer += $input->readString($this->n2);
+                    } else {
+                        $xfer += $input->skip($ftype);
+                    }
+                    break;
                 default:
                     $xfer += $input->skip($ftype);
                     break;
@@ -184,6 +222,16 @@ class TimAck
         if ($this->n !== null) {
             $xfer += $output->writeFieldBegin('n', TType::STRING, 5);
             $xfer += $output->writeString($this->n);
+            $xfer += $output->writeFieldEnd();
+        }
+        if ($this->t2 !== null) {
+            $xfer += $output->writeFieldBegin('t2', TType::I64, 6);
+            $xfer += $output->writeI64($this->t2);
+            $xfer += $output->writeFieldEnd();
+        }
+        if ($this->n2 !== null) {
+            $xfer += $output->writeFieldBegin('n2', TType::STRING, 7);
+            $xfer += $output->writeString($this->n2);
             $xfer += $output->writeFieldEnd();
         }
         $xfer += $output->writeFieldStop();
