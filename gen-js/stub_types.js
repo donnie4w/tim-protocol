@@ -77,6 +77,8 @@ TimAck = function(args) {
   this.error = null;
   this.t = null;
   this.n = null;
+  this.t2 = null;
+  this.n2 = null;
   if (args) {
     if (args.ok !== undefined && args.ok !== null) {
       this.ok = args.ok;
@@ -96,6 +98,12 @@ TimAck = function(args) {
     }
     if (args.n !== undefined && args.n !== null) {
       this.n = args.n;
+    }
+    if (args.t2 !== undefined && args.t2 !== null) {
+      this.t2 = args.t2;
+    }
+    if (args.n2 !== undefined && args.n2 !== null) {
+      this.n2 = args.n2;
     }
   }
 };
@@ -146,6 +154,20 @@ TimAck.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 6:
+      if (ftype == Thrift.Type.I64) {
+        this.t2 = input.readI64().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 7:
+      if (ftype == Thrift.Type.STRING) {
+        this.n2 = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -180,6 +202,16 @@ TimAck.prototype.write = function(output) {
   if (this.n !== null && this.n !== undefined) {
     output.writeFieldBegin('n', Thrift.Type.STRING, 5);
     output.writeString(this.n);
+    output.writeFieldEnd();
+  }
+  if (this.t2 !== null && this.t2 !== undefined) {
+    output.writeFieldBegin('t2', Thrift.Type.I64, 6);
+    output.writeI64(this.t2);
+    output.writeFieldEnd();
+  }
+  if (this.n2 !== null && this.n2 !== undefined) {
+    output.writeFieldBegin('n2', Thrift.Type.STRING, 7);
+    output.writeString(this.n2);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -725,6 +757,7 @@ TimRoomBean = function(args) {
   this.topic = null;
   this.label = null;
   this.gtype = null;
+  this.kind = null;
   this.createtime = null;
   this.extend = null;
   this.extra = null;
@@ -746,6 +779,9 @@ TimRoomBean = function(args) {
     }
     if (args.gtype !== undefined && args.gtype !== null) {
       this.gtype = args.gtype;
+    }
+    if (args.kind !== undefined && args.kind !== null) {
+      this.kind = args.kind;
     }
     if (args.createtime !== undefined && args.createtime !== null) {
       this.createtime = args.createtime;
@@ -821,12 +857,19 @@ TimRoomBean.prototype.read = function(input) {
       break;
       case 7:
       if (ftype == Thrift.Type.I64) {
-        this.createtime = input.readI64().value;
+        this.kind = input.readI64().value;
       } else {
         input.skip(ftype);
       }
       break;
       case 8:
+      if (ftype == Thrift.Type.I64) {
+        this.createtime = input.readI64().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 9:
       if (ftype == Thrift.Type.MAP) {
         this.extend = {};
         var _rtmp331 = input.readMapBegin();
@@ -848,7 +891,7 @@ TimRoomBean.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
-      case 9:
+      case 10:
       if (ftype == Thrift.Type.MAP) {
         this.extra = {};
         var _rtmp336 = input.readMapBegin();
@@ -918,13 +961,18 @@ TimRoomBean.prototype.write = function(output) {
     output.writeByte(this.gtype);
     output.writeFieldEnd();
   }
+  if (this.kind !== null && this.kind !== undefined) {
+    output.writeFieldBegin('kind', Thrift.Type.I64, 7);
+    output.writeI64(this.kind);
+    output.writeFieldEnd();
+  }
   if (this.createtime !== null && this.createtime !== undefined) {
-    output.writeFieldBegin('createtime', Thrift.Type.I64, 7);
+    output.writeFieldBegin('createtime', Thrift.Type.I64, 8);
     output.writeI64(this.createtime);
     output.writeFieldEnd();
   }
   if (this.extend !== null && this.extend !== undefined) {
-    output.writeFieldBegin('extend', Thrift.Type.MAP, 8);
+    output.writeFieldBegin('extend', Thrift.Type.MAP, 9);
     output.writeMapBegin(Thrift.Type.STRING, Thrift.Type.STRING, Thrift.objectLength(this.extend));
     for (var kiter41 in this.extend) {
       if (this.extend.hasOwnProperty(kiter41)) {
@@ -937,7 +985,7 @@ TimRoomBean.prototype.write = function(output) {
     output.writeFieldEnd();
   }
   if (this.extra !== null && this.extra !== undefined) {
-    output.writeFieldBegin('extra', Thrift.Type.MAP, 9);
+    output.writeFieldBegin('extra', Thrift.Type.MAP, 10);
     output.writeMapBegin(Thrift.Type.STRING, Thrift.Type.STRING, Thrift.objectLength(this.extra));
     for (var kiter43 in this.extra) {
       if (this.extra.hasOwnProperty(kiter43)) {
